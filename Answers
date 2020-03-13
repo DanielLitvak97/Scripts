@@ -1,0 +1,37 @@
+1+2+3.
+from re import search
+from urllib import request
+from bs4 import BeautifulSoup
+
+file = open("C:/centos_downloads/s_at_the_beginning/names.txt", "a")
+centos_site = "http://mirror.centos.org/centos/7/extras/x86_64/Packages/"
+result = request.urlopen(centos_site)
+table = BeautifulSoup(result, 'lxml')
+for link in table.find_all("a"):
+    if search("\.rpm$", link['href']):
+
+        # The below section is the answer for questions No. 1 and 2
+        if link['href'][0] == "s":
+        # with regex it would be: if re.search("^s", link['href']):
+            file.write(link['href'] + "\n")
+            request.urlretrieve(centos_site + link['href'], "C:/centos_downloads/s_at_the_beginning/" + link['href'])
+
+        # The below section is the answer for question No. 3
+        if search(".*1.37-.*", link['href']):
+            request.urlretrieve(centos_site + link['href'], "C:/centos_downloads/contains_1.37-/" + link['href'])
+
+file.close()
+
+
+
+4.
+file_example = open("C:/example/example.txt", "r")
+new_file_example = open("C:/example/the_below_section.txt", "a")
+list_lines = file_example.readlines()
+
+for line in range(len(list_lines)):
+    if list_lines[line] == "PLAY RECAP\n" and "failed=0" not in list_lines[line + 2]:
+        new_file_example.write(list_lines[line + 1] + list_lines[line + 2])
+
+file_example.close()
+new_file_example.close()
